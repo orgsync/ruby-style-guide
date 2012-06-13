@@ -206,6 +206,16 @@ You can generate a PDF or an HTML copy of this guide using
                      subject: 'Important message',
                      body: source.text)
     end
+    
+    # good
+    def send_mail(source)
+      Mailer.deliver(
+        to: 'bob@example.com',
+        from: 'us@example.com',
+        subject: 'Important message',
+        body: source.text
+      )
+    end
     ```
 
 * Use RDoc and its conventions for API documentation.  Don't put an

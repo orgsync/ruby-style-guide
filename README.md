@@ -1499,7 +1499,8 @@ patch them.)
     Foo.bar = 1
     ```
 
-* Avoid `alias` when `alias_method` will do.
+* Avoid `alias` when `alias_method` will do. The `alias` method does not work
+correctly with inheritance. http://blog.bigbinary.com/2012/01/08/alias-vs-alias-method.html
 * Use `OptionParser` for parsing complex command line options and
 `ruby -s` for trivial command line options.
 * Code in a functional way, avoiding mutation when that makes sense.

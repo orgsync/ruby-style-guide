@@ -996,17 +996,6 @@ in *Ruby* now, not in *Python*.
 
 ## Exceptions
 
-* Signal exceptions using the `fail` keyword. Use `raise` only when
-  catching an exception and re-raising it (because here you're not failing, but explicitly and purposefully raising an exception).
-
-    ```Ruby
-    begin
-      fail 'Oops';
-    rescue => error
-      raise if error.message != 'Oops'
-    end
-    ```
-
 * Never return form an `ensure` block. If you explicitly return from a
   method inside an `ensure` block, the return will take precedence over
   any exception being raised, and the method will return as if no
@@ -1016,7 +1005,7 @@ in *Ruby* now, not in *Python*.
     ```Ruby
     def foo
       begin
-        fail
+        raise
       ensure
         return 'very bad idea'
       end

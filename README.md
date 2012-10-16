@@ -1,100 +1,10 @@
-# Prelude
-
-> Style is what separates the good from the great. <br/>
-> -- Bozhidar Batsov
-
-One thing has always bothered me as Ruby developer - Python developers
-have a great programming style reference
-([PEP-8](http://www.python.org/dev/peps/pep-0008/)) and we never got
-an official guide, documenting Ruby coding style and best
-practices. And I do believe that style matters. I also believe that
-such fine fellows, like us Ruby developers, should be quite capable to
-produce this coveted document.
-
-This guide started its life as our internal company Ruby coding guidelines
-(written by yours truly). At some point I decided that the work I was
-doing might be interesting to members of the Ruby community in general
-and that the world had little need for another internal company
-guideline. But the world could certainly benefit from a
-community-driven and community-sanctioned set of practices, idioms and
-style prescriptions for Ruby programming.
-
-Since the inception of the guide I've received a lot of feedback from
-members of the exceptional Ruby community around the world. Thanks for
-all the suggestions and the support! Together we can make a resource
-beneficial to each and every Ruby developer out there.
-
-By the way, if you're into Rails you might want to check out the
-complementary
-[Ruby on Rails 3 Style Guide](https://github.com/bbatsov/rails-style-guide).
-
-# The Ruby Style Guide
-
-This Ruby style guide recommends best practices so that real-world Ruby
-programmers can write code that can be maintained by other real-world Ruby
-programmers. A style guide that reflects real-world usage gets used, and a
-style guide that holds to an ideal that has been rejected by the people it is
-supposed to help risks not getting used at all &ndash; no matter how good it is.
-
-The guide is separated into several sections of related rules. I've
-tried to add the rationale behind the rules (if it's omitted I've
-assumed that is pretty obvious).
-
-I didn't come up with all the rules out of nowhere - they are mostly
-based on my extensive career as a professional software engineer,
-feedback and suggestions from members of the Ruby community and
-various highly regarded Ruby programming resources, such as
-["Programming Ruby 1.9"](http://pragprog.com/book/ruby3/programming-ruby-1-9)
-and ["The Ruby Programming Language"](http://www.amazon.com/Ruby-Programming-Language-David-Flanagan/dp/0596516177).
-
-The guide is still a work in progress - some rules are lacking
-examples, some rules don't have examples that illustrate them clearly
-enough. In due time these issues will be addressed - just keep them in
-mind for now.
-
-You can generate a PDF or an HTML copy of this guide using
-[Transmuter](https://github.com/TechnoGate/transmuter).
-
-## Table of Contents
-
-* [Source Code Layout](#source-code-layout)
-* [Syntax](#syntax)
-* [Naming](#naming)
-* [Comments](#comments)
-* [Annotations](#annotations)
-* [Classes](#classes)
-* [Exceptions](#exceptions)
-* [Collections](#collections)
-* [Strings](#strings)
-* [Regular Expressions](#regular-expressions)
-* [Percent Literals](#percent-literals)
-* [Metaprogramming](#metaprogramming)
-* [Misc](#misc)
-
 ## Source Code Layout
-
-> Nearly everybody is convinced that every style but their own is
-> ugly and unreadable. Leave out the "but their own" and they're
-> probably right... <br/>
-> -- Jerry Coffin (on indentation)
 
 * Use `UTF-8` as the source file encoding.
 * Use two **spaces** per indentation level.
-
-    ```Ruby
-    # good
-    def some_method
-      do_something
-    end
-
-    # bad - four spaces
-    def some_method
-        do_something
-    end
-    ```
-
-* Use Unix-style line endings. (*BSD/Solaris/Linux/OSX users are covered by default,
-  Windows users have to be extra careful.)
+* Keep lines fewer than 80 characters.
+* Avoid trailing whitespace.
+* Use Unix-style line endings.
     * If you're using Git you might want to add the following
     configuration setting to protect your project from Windows line
     endings creeping in:
@@ -102,24 +12,13 @@ You can generate a PDF or an HTML copy of this guide using
         ```$ git config --global core.autocrlf true```
 
 * Use spaces around operators, after commas, colons and semicolons, around `{`
-  and before `}`. Whitespace might be (mostly) irrelevant to the Ruby
-  interpreter, but its proper use is the key to writing easily
-  readable code.
+  and before `}`, except for the exponent operator.
 
     ```Ruby
     sum = 1 + 2
     a, b = 1, 2
     1 > 2 ? true : false; puts 'Hi'
     [1, 2, 3].each { |e| puts e }
-    ```
-
-    The only exception is when using the exponent operator:
-
-    ```Ruby
-    # bad
-    e = M * c ** 2
-
-    # good
     e = M * c**2
     ```
 
@@ -145,15 +44,6 @@ You can generate a PDF or an HTML copy of this guide using
     else
       song.play
     end
-
-    kind = case year
-           when 1850..1889 then 'Blues'
-           when 1890..1909 then 'Ragtime'
-           when 1910..1929 then 'New Orleans Jazz'
-           when 1930..1939 then 'Swing'
-           when 1940..1950 then 'Bebop'
-           else 'Jazz'
-           end
     ```
 
 * Use empty lines between `def`s and to break up a method into logical
@@ -162,8 +52,6 @@ You can generate a PDF or an HTML copy of this guide using
     ```Ruby
     def some_method
       data = initialize(options)
-
-      data.manipulate!
 
       data.result
     end
@@ -190,15 +78,6 @@ You can generate a PDF or an HTML copy of this guide using
         body: source.text)
     end
 
-    # bad (double indent)
-    def send_mail(source)
-      Mailer.deliver(
-          to: 'bob@example.com',
-          from: 'us@example.com',
-          subject: 'Important message',
-          body: source.text)
-    end
-
     # good
     def send_mail(source)
       Mailer.deliver(to: 'bob@example.com',
@@ -217,11 +96,6 @@ You can generate a PDF or an HTML copy of this guide using
       )
     end
     ```
-
-* Use RDoc and its conventions for API documentation.  Don't put an
-  empty line between the comment block and the `def`.
-* Keep lines fewer than 80 characters.
-* Avoid trailing whitespace.
 
 ## Syntax
 
@@ -297,17 +171,6 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-* Never use `if x: ...` - it is removed in Ruby 1.9. Use
-  the ternary operator instead.
-
-    ```Ruby
-    # bad
-    result = if some_condition: something else something_else end
-
-    # good
-    result = some_condition ? something : something_else
-    ```
-
 * Never use `if x; ...`. Use the ternary operator instead.
 
 * Use `when x then ...` for one-line cases. The alternative syntax
@@ -315,17 +178,20 @@ You can generate a PDF or an HTML copy of this guide using
 
 * Never use `when x; ...`. See the previous rule.
 
-* Use `&&/||` for boolean expressions, `and/or` for control flow.  (Rule
-  of thumb: If you have to use outer parentheses, you are using the
-  wrong operators.)
+* Use `&&/||` for boolean expressions, avoid using `and/or`.
 
     ```Ruby
-    # boolean expression
+    # bad
+    if some_condition and some_other_condition
+      do_something
+    end
+
+    # good
     if some_condition && some_other_condition
       do_something
     end
 
-    # control flow
+    # bad
     document.saved? or document.save!
     ```
 
@@ -347,8 +213,7 @@ You can generate a PDF or an HTML copy of this guide using
     some_condition and do_something
     ```
 
-* Favor `unless` over `if` for negative conditions (or control
-  flow `or`).
+* Favor `unless` over `if` for negative conditions. Do not use unless with anything other than a unary (1) expression.
 
     ```Ruby
     # bad
@@ -357,8 +222,14 @@ You can generate a PDF or an HTML copy of this guide using
     # good
     do_something unless some_condition
 
-    # another good option
+    # bad
     some_condition or do_something
+
+    # bad
+    do_something unless some_condition && some_other_condition
+
+    # better
+    do_something if !some_condition || !some_other_condition
     ```
 
 * Never use `unless` with `else`. Rewrite these with the positive case first.
@@ -380,8 +251,7 @@ You can generate a PDF or an HTML copy of this guide using
     ```
 
 * Don't use parentheses around the condition of an `if/unless/while`,
-  unless the condition contains an assignment (see "Using the return
-  value of `=`" below).
+  unless the condition contains an assignment followed by an operator.
 
     ```Ruby
     # bad
@@ -394,7 +264,7 @@ You can generate a PDF or an HTML copy of this guide using
       # body omitted
     end
 
-    # ok
+    # bad
     if (x = self.next_value)
       # body omitted
     end
@@ -413,7 +283,7 @@ You can generate a PDF or an HTML copy of this guide using
     do_something while some_condition
     ```
 
-* Favor `until` over `while` for negative conditions.
+* Favor `until` over `while` for negative unary (1) expressions.
 
     ```Ruby
     # bad
@@ -537,6 +407,7 @@ You can generate a PDF or an HTML copy of this guide using
         end
       end
     end
+    ```
 
 * Use spaces around the `=` operator when assigning default values to method parameters:
 
@@ -552,13 +423,18 @@ You can generate a PDF or an HTML copy of this guide using
     end
     ```
 
-    While several Ruby books suggest the first style, the second is much more prominent
-    in practice (and arguably a bit more readable).
-
 * Avoid line continuation (\\) where not required. In practice, avoid using
   line continuations at all.
 
     ```Ruby
+    # bad
+    blah = \
+      really_long_statement
+
+    # good
+    blah =
+      really_long_statement
+
     # bad
     result = 1 - \
              2
@@ -566,20 +442,6 @@ You can generate a PDF or an HTML copy of this guide using
     # good (but still ugly as hell)
     result = 1 \
              - 2
-    ```
-
-* Using the return value of `=` (an assignment) is ok, but surround the
-  assignment with parenthesis.
-
-    ```Ruby
-    # good - shows intended use of assignment
-    if (v = array.grep(/foo/)) ...
-
-    # bad
-    if v = array.grep(/foo/) ...
-
-    # also good - shows intended use of assignment and has correct precedence.
-    if (v = self.next_value) == 'hello' ...
     ```
 
 * Use `||=` freely to initialize variables.
@@ -626,10 +488,10 @@ syntax.
 
     ```Ruby
     # bad
-    hash = { :one => 1, :two => 2 }
+    hash = {:one => 1, :two => 2}
 
     # good
-    hash = { one: 1, two: 2 }
+    hash = {one: 1, two: 2}
     ```
 
 * Use the new lambda literal syntax.
@@ -807,72 +669,6 @@ at all.
 * Try to make your classes as
   [SOLID](http://en.wikipedia.org/wiki/SOLID_(object-oriented_design\))
   as possible.
-* Always supply a proper `to_s` method for classes that represent
-  domain objects.
-
-    ```Ruby
-    class Person
-      attr_reader :first_name, :last_name
-
-      def initialize(first_name, last_name)
-        @first_name = first_name
-        @last_name = last_name
-      end
-
-      def to_s
-        "#@first_name #@last_name"
-      end
-    end
-    ```
-
-* Use the `attr` family of functions to define trivial accessors or
-mutators.
-
-    ```Ruby
-    # bad
-    class Person
-      def initialize(first_name, last_name)
-        @first_name = first_name
-        @last_name = last_name
-      end
-
-      def first_name
-        @first_name
-      end
-
-      def last_name
-        @last_name
-      end
-    end
-
-    # good
-    class Person
-      attr_reader :first_name, :last_name
-
-      def initialize(first_name, last_name)
-        @first_name = first_name
-        @last_name = last_name
-      end
-    end
-    ```
-* Consider using `Struct.new`, which defines the trivial accessors,
-constructor and comparison operators for you.
-
-    ```Ruby
-    # good
-    class Person
-      attr_reader :first_name, :last_name
-
-      def initialize(first_name, last_name)
-        @first_name = first_name
-        @last_name = last_name
-      end
-    end
-
-    # better
-    class Person < Struct.new (:first_name, :last_name)
-    end
-    ````
 
 * Consider adding factory methods to provide additional sensible ways
 to create instances of a particular class.
@@ -881,44 +677,6 @@ to create instances of a particular class.
     class Person
       def self.create(options_hash)
         # body omitted
-      end
-    end
-    ```
-
-* Prefer [duck-typing](http://en.wikipedia.org/wiki/Duck_typing) over inheritance.
-
-    ```Ruby
-    # bad
-    class Animal
-      # abstract method
-      def speak
-      end
-    end
-
-    # extend superclass
-    class Duck < Animal
-      def speak
-        puts 'Quack! Quack'
-      end
-    end
-
-    # extend superclass
-    class Dog < Animal
-      def speak
-        puts 'Bau! Bau!'
-      end
-    end
-
-    # good
-    class Duck
-      def speak
-        puts 'Quack! Quack'
-      end
-    end
-
-    class Dog
-      def speak
-        puts 'Bau! Bau!'
       end
     end
     ```
@@ -951,7 +709,7 @@ in accordance with their intended usage. Don't go off leaving
 everything `public` (which is the default). After all we're coding
 in *Ruby* now, not in *Python*.
 * Indent the `public`, `protected`, and `private` methods as much the
-  method definitions they apply to. Leave one blank line above them.
+  method definitions they apply to. Leave one blank line above them and below them.
 
     ```Ruby
     class SomeClass
@@ -960,6 +718,7 @@ in *Ruby* now, not in *Python*.
       end
 
       private
+
       def private_method
         # ...
       end
@@ -1217,13 +976,13 @@ syntax.
 
     ```Ruby
     # bad
-    hash = { :one => 1, :two => 2, :three => 3 }
+    hash = {:one => 1, :two => 2, :three => 3}
 
     # good
-    hash = { one: 1, two: 2, three: 3 }
+    hash = {one: 1, two: 2, three: 3}
     ```
 
-* Rely on the fact that hashes in 1.9 are ordered.
+* Rely on the fact that hashes in **1.9** are ordered.
 * Never modify a collection while traversing it.
 
 ## Strings
@@ -1238,13 +997,6 @@ syntax.
     email_with_name = "#{user.name} <#{user.email}>"
     ```
 
-* Consider padding string interpolation code with space. It more clearly sets the
-  code apart from the string.
-
-    ```Ruby
-    "#{ user.last_name }, #{ user.first_name }"
-    ```
-
 * Prefer single-quoted strings when you don't need string interpolation or
   special symbols such as `\t`, `\n`, `'`, etc.
 
@@ -1256,31 +1008,7 @@ syntax.
     name = 'Bozhidar'
     ```
 
-* Don't use `{}` around instance variables being interpolated into a
-  string.
-
-    ```Ruby
-    class Person
-      attr_reader :first_name, :last_name
-
-      def initialize(first_name, last_name)
-        @first_name = first_name
-        @last_name = last_name
-      end
-
-      # bad
-      def to_s
-        "#{@first_name} #{@last_name}"
-      end
-
-      # good
-      def to_s
-        "#@first_name #@last_name"
-      end
-    end
-    ```
-
-* Avoid using `String#+` when you need to construct large data chunks.
+* Avoid using `String#+` when you need to construct **large** data chunks.
   Instead, use `String#<<`. Concatenation mutates the string instance in-place
   and is always faster than `String#+`, which creates a bunch of new string objects.
 
@@ -1314,7 +1042,7 @@ syntax.
     ```
 
 * Avoid using $1-9 as it can be hard to track what they contain. Named groups
-  can be used instead.
+  can be used instead. **Ruby 1.9 Only**
 
     ```Ruby
     # bad
@@ -1382,6 +1110,13 @@ syntax.
 
     # good (requires interpolation, has quotes, single line)
     %(<tr><td class="name">#{name}</td>)
+
+    # better, supports proper syntax highlighting in some editors
+    <<-HTML
+      <tr>
+        <td class="name">#{name}</td>
+      </tr>
+    HTML
     ```
 
 * Use `%r` only for regular expressions matching *more than* one '/' character.

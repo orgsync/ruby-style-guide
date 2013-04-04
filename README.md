@@ -269,6 +269,25 @@
       # body omitted
     end
     ```
+    
+*   Don't repeat yourself when assigning a variable with a conditional.
+
+    ```ruby
+    # bad
+    if bar
+      foo = baz
+    else
+      foo = qux
+    end
+
+    # good
+    foo =
+      if bar
+        baz
+      else
+        qux
+      end
+    ```
 
 * Favor modifier `while/until` usage when you have a single-line
   body.
